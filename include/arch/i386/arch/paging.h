@@ -1,0 +1,49 @@
+#ifndef PAGING_H
+#define PAGING_H
+
+#include "types.h"
+
+#define PAGE_SHIFT			12
+#define PAGE_SIZE			(1 << PAGE_SHIFT)
+#define PAGE_MASK			(PAGE_SIZE - 1)
+//#define PAGE_OFFSET(x)		((x) & ~PAGE_MASK)
+
+#define PGDIR_SHIFT			22
+#define SUPERPAGE_SIZE		(1 << PGDIR_SHIFT)
+#define SUPERPAGE_MASK		(SUPERPAGE_SIZE - 1)
+
+#define PAGE_ROUND(x)		(((x) + PAGE_MASK) & ~PAGE_MASK)
+#define PAGE_TRUNC(x)		(x & ~PAGE_MASK)
+#define PAGE_ADDRESS(x)		PAGE_TRUNC(x)
+
+#define SUPERPAGE_ROUND(x)	(((x) + SUPERPAGE_MASK) & ~SUPERPAGE_MASK)
+#define SUPERPAGE_TRUNC(x)	(x & ~SUPERPAGE_MASK)
+
+#define PDE_PRESENT			0x00000001
+#define PDE_WRITE			0x00000002
+#define PDE_USER			0x00000004
+#define PDE_SUPERVISOR		0x00000000
+#define PDE_WRITE_THROUGH	0x00000008
+#define PDE_CACHE_DISABLED	0x00000010
+#define PDE_ACCESSED		0x00000020
+#define PDE_PAGE_SIZE		0x00000080
+
+#define PTE_PRESENT			0x00000001
+#define PTE_WRITE			0x00000002
+#define PTE_USER			0x00000004
+#define PTE_SUPERVISOR		0x00000000
+#define PTE_WRITE_THROUGH	0x00000008
+#define PTE_CACHE_DISABLED	0x00000010
+#define PTE_ACCESSED		0x00000020
+#define PTE_DIRTY			0x00000040
+#define PTE_GLOBAL			0x00000100
+#define PTE_AVAIL1			0x00000200
+#define PTE_AVAIL2			0x00000400
+#define PTE_AVAIL3			0x00000800
+
+typedef uint32_t vm_pde_t;
+typedef uint32_t vm_pte_t;
+
+#define ENTRIES_PER_PAGE	(PAGE_SIZE / sizeof(vm_pte_t))
+
+#endif /* ndef PAGING_H */

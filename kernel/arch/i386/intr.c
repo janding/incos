@@ -1,0 +1,3 @@
+void intr_init()
+{
+}
