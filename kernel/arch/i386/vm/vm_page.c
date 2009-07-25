@@ -43,16 +43,18 @@ invalidate_range(vaddr_t from, vaddr_t to)
 
 
 void
-map(vm_pde_t *pgdir_va, vm_pte_t *pgtbl_va, vaddr_t va, paddr_t pa, size_t size)
+map(vm_pde_t *pgdir_va, vm_pte_t *pgtbl_va, vaddr_t va, paddr_t pa, size_t size, unsigned int flags)
 {
 	vaddr_t va_a = va, va_e = va + size - 1;
+	unsigned int pd_flags = flags & (PDE_USER | PDE_WRITE);
+	unsigned int pt_flags = flags & (PDE_USER | PDE_WRITE);
 
 	while (size > 0) {
 		if (!(pgdir_va[va >> PGDIR_SHIFT] & PDE_PRESENT)) {
 
 			if ((size >= SUPERPAGE_SIZE) && ((va & SUPERPAGE_MASK) == 0)/* && (cpu_features & CPU_PSE)*/) {
 				// 4 MB page
-				pgdir_va[va >> PGDIR_SHIFT] = pa | PDE_PAGE_SIZE | PDE_USER | PDE_WRITE | PDE_PRESENT;
+				pgdir_va[va >> PGDIR_SHIFT] = pa | PDE_PAGE_SIZE | pd_flags | PDE_PRESENT;
 				
 				va += SUPERPAGE_SIZE;
 				pa += SUPERPAGE_SIZE;
@@ -61,7 +63,7 @@ map(vm_pde_t *pgdir_va, vm_pte_t *pgtbl_va, vaddr_t va, paddr_t pa, size_t size)
 			}
 
 			pgdir_va[va >> PGDIR_SHIFT] = phys_alloc_zeroed_page(PAGE_SIZE)
-				| PDE_USER | PDE_WRITE | PDE_PRESENT;
+				| pd_flags | PDE_PRESENT;
 			//kprintf("allocated pgdir_va %08x[%08x] = %08x for %08x\n", pgdir_va, va >> PGDIR_SHIFT, pgdir_va[va >> PGDIR_SHIFT], va & 0xffc00000);
 			
 			if (pgtbl_va != NULL)
@@ -69,9 +71,9 @@ map(vm_pde_t *pgdir_va, vm_pte_t *pgtbl_va, vaddr_t va, paddr_t pa, size_t size)
 		}
 		
 		if (pgtbl_va != NULL)
-			pgtbl_va[va >> PAGE_SHIFT] = pa | PTE_USER | PTE_WRITE | PTE_PRESENT;
+			pgtbl_va[va >> PAGE_SHIFT] = pa | pt_flags | PTE_PRESENT;
 		else
-			((vm_pte_t*)(pgdir_va[va >> PGDIR_SHIFT] & ~PAGE_MASK))[(va >> PAGE_SHIFT) % ENTRIES_PER_PAGE] = pa | PDE_USER | PTE_WRITE | PTE_PRESENT;
+			((vm_pte_t*)(pgdir_va[va >> PGDIR_SHIFT] & ~PAGE_MASK))[(va >> PAGE_SHIFT) % ENTRIES_PER_PAGE] = pa | pt_flags | PTE_PRESENT;
 
 		//kprintf("mapped pgtbl_va %08x[%08x] = %08x\n",  pgtbl_va, (va >> PAGE_SHIFT), pa);
 
@@ -100,7 +102,7 @@ map_range_into_kernel(paddr_t pa, size_t size)
 	}
 
 	if (contiguous) {
-		map(pgdir, pgtbl, pa + KERNEL_BEGIN, pa, PAGE_ROUND(size));
+		map(pgdir, pgtbl, pa + KERNEL_BEGIN, pa, PAGE_ROUND(size), PG_U);
 		return (void*)(pa + KERNEL_BEGIN);
 	}
 

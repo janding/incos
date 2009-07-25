@@ -128,7 +128,15 @@ uint32_t int_handler(uint32_t _esp)
 		if (sf->cs & 3)
 			kprintf("ss = %04x  esp = %08x\n", sf->ss, sf->esp);
 		kprintf("cs = %04x  ds = %04x  es = %04x  fs = %04x  gs = %04x\n", sf->cs, sf->ds, sf->es, sf->fs, sf->gs);
-		kprintf("cr2 = %08x\n", read_cr2());
+		if (sf->interrupt == 0x0e) {
+			kprintf("cr2 = %08x reason: ", read_cr2());
+			if (sf->error & 0x01) kprintf(" access violation"); else  kprintf("page not present");
+			if (sf->error & 0x02) kprintf(", write"); else  kprintf(", read");
+			if (sf->error & 0x04) kprintf(", user"); else  kprintf(", supervisor");
+			if (sf->error & 0x08) kprintf(", reserved"); 
+			if (sf->error & 0x10) kprintf(", instruction fetch"); 
+			kprintf("\n");
+		}
 		for(;;);
 	}
 

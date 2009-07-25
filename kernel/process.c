@@ -5,7 +5,7 @@
 
 extern void	arch_init_process(process_t *process);
 extern void	arch_init_thread(thread_t *thread, void *entry);
-extern void	arch_process_map(process_t *process, vaddr_t va, paddr_t pa, size_t size);
+extern void	arch_process_map(process_t *process, vaddr_t va, paddr_t pa, size_t size, unsigned int flags);
 
 
 static pmem_pool_t *process_pool;
@@ -17,14 +17,14 @@ static uint32_t process_id = 0;
 void
 process_map(process_t *process, vaddr_t va, paddr_t pa, size_t size)
 {
-	arch_process_map(process, va, pa, size);
+	arch_process_map(process, va, pa, size, PG_U | PG_W);
 }
 
 void
 process_zero_mem(process_t *process, vaddr_t va, size_t size)
 {
 	for (int i = 0; i < size; i += PAGE_SIZE)
-		arch_process_map(process, va + i, phys_alloc_zeroed_page(), PAGE_SIZE);
+		arch_process_map(process, va + i, phys_alloc_zeroed_page(), PAGE_SIZE, PG_U | PG_W);
 }
 
 process_t *

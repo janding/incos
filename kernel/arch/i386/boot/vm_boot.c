@@ -84,10 +84,10 @@ vm_bootstrap(uint32_t mb_magic, multiboot_info_t *mb_info)
 	for (unsigned int i = 0; i < SUPERPAGE_ROUND(identity_map_end); i += SUPERPAGE_SIZE) {
 		vm_pte_t *pgtbl = vm_boot_alloc_page(&sbrk);
 		
-		boot_pgdir[i >> PGDIR_SHIFT] = (vm_pde_t)(pgtbl) | PDE_USER | PDE_WRITE | PDE_PRESENT;
+		boot_pgdir[i >> PGDIR_SHIFT] = (vm_pde_t)(pgtbl) | PDE_WRITE | PDE_PRESENT;
 		
 		for (unsigned int j = 0; j < ENTRIES_PER_PAGE; j++) {
-			pgtbl[j] = (vm_pte_t)(i + (j << PAGE_SHIFT)) | PTE_USER | PTE_WRITE | PTE_PRESENT;
+			pgtbl[j] = (vm_pte_t)(i + (j << PAGE_SHIFT)) | PTE_WRITE | PTE_PRESENT;
 		}
 	}
 
@@ -96,7 +96,7 @@ vm_bootstrap(uint32_t mb_magic, multiboot_info_t *mb_info)
 	}
 
 	// recursive page directory mapping
-	boot_pgdir[0x3ff] = (vm_pde_t)boot_pgdir | PDE_USER | PDE_WRITE | PDE_PRESENT;
+	boot_pgdir[0x3ff] = (vm_pde_t)boot_pgdir | PDE_PRESENT;
 
 	phys_start = PAGE_TRUNC((paddr_t)&kernel_phys_start);
 	virt_start = PAGE_TRUNC((vaddr_t)&kernel_virt_start);
@@ -109,10 +109,10 @@ vm_bootstrap(uint32_t mb_magic, multiboot_info_t *mb_info)
 	for (unsigned int i = SUPERPAGE_TRUNC(virt_start); i < SUPERPAGE_ROUND(virt_end); i += SUPERPAGE_SIZE) {
 		vm_pte_t *pgtbl = vm_boot_alloc_page(&sbrk);
 		
-		boot_pgdir[i >> PGDIR_SHIFT] = (vm_pde_t)(pgtbl) | PDE_USER | PDE_WRITE | PDE_PRESENT;
+		boot_pgdir[i >> PGDIR_SHIFT] = (vm_pde_t)(pgtbl) | PDE_WRITE | PDE_PRESENT;
 		
 		for (unsigned int j = 0; j < ENTRIES_PER_PAGE; j++) {
-			pgtbl[j] = (vm_pte_t)(i + (j << PAGE_SHIFT) + vtop) | PTE_USER | PTE_WRITE | PTE_PRESENT;
+			pgtbl[j] = (vm_pte_t)(i + (j << PAGE_SHIFT) + vtop) | PTE_WRITE | PTE_PRESENT;
 		}
 	}
 

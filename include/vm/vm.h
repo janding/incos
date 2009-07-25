@@ -19,13 +19,15 @@ extern unsigned int	vm_num_phys_pages();
 extern unsigned int	vm_num_boot_pages();
 extern unsigned int	vm_num_static_pages();
 
+#define PG_W		2
+#define PG_U		4
 
 // arch/vm/vm_page.c
 //extern void *	virt_to_phys(paddr_t pa, unsigned int low, unsigned int high);
 extern void *	phys_to_virt(paddr_t pa, unsigned int low, unsigned int high);
 extern void		invalidate_page(vaddr_t addr);
 extern void		invalidate_range(vaddr_t from, vaddr_t to);
-extern void		map(vm_pde_t *pgdir_va, vm_pte_t *pgtbl_va, vaddr_t va, paddr_t pa, size_t size);
+extern void		map(vm_pde_t *pgdir_va, vm_pte_t *pgtbl_va, vaddr_t va, paddr_t pa, size_t size, unsigned int flags);
 extern void *	map_into_kernel(paddr_t pa);
 
 
