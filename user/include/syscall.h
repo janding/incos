@@ -33,4 +33,12 @@ syscall_gettid(void)
 	return syscall0(SYSCALL_GETTID);
 }
 
+__attribute__((__noreturn__))
+static inline void
+syscall_exit(int code)
+{
+	syscall1(SYSCALL_EXIT, code);
+	for (;;);
+}
+
 #endif /* ndef SYSCALL_H */

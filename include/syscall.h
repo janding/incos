@@ -5,6 +5,7 @@
 
 extern int syscall(unsigned int number);
 
+void	syscall_exit(int e);
 int		syscall_dprint(const char *s);
 int		syscall_gettid(void);
 int		syscall_getpid(void);

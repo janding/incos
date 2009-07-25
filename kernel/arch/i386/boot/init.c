@@ -11,7 +11,7 @@ extern void pic_init();
 extern void tss_init();
 extern void rtc_init();
 
-extern void run_elf_image(paddr_t base);
+extern void run_elf_image(paddr_t base, const char *cmdline);
 
 void
 run_boot_modules()
@@ -19,7 +19,7 @@ run_boot_modules()
 	multiboot_module_t * modules = (multiboot_module_t *)multiboot_info->mods_addr;
 
 	for (int i = 0; i < multiboot_info->mods_count; i++) {
-		run_elf_image(modules[i].mod_start);
+		run_elf_image(modules[i].mod_start, (const char *)modules[i].string);
 	}
 }
 

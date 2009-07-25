@@ -33,6 +33,24 @@ sched_ready(thread_t *thread)
 }
 
 void
+sched_kill(thread_t *thread)
+{
+	if (thread == current_thread)
+		schedule();
+
+	if (first_thread == thread)
+		first_thread = thread->next;
+
+	for (thread_t *t = first_thread; t; t = t->next) {
+		if (t->next == thread) {
+			t->next = thread->next;
+			if (thread == last_thread)
+				last_thread = t;
+		}
+	}
+}
+
+void
 sched_init()
 {
 	idle_thread.process = NULL;
