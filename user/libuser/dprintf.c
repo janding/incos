@@ -1,6 +1,8 @@
 #include <stdarg.h>
 #include <stddef.h>
 
+#include "syscall.h"
+
 extern int cons_puts(const char*);
 
 static int 
@@ -12,18 +14,14 @@ abs(int i)
 static int
 putstr(const char* s)
 {
-	static short *video = (short*)0xb8000;
-	int i = 0;
-	while (s[i]) *video++ = 0x0700 | s[i++];
-	
-	return i;
+	return syscall_dprint(s);
 }
 
 static int 
 putchar(int c)
 {
 	char b[2] = { c, 0 };
-	putstr(b);
+	syscall_dprint(b);
 	return c;
 }
 

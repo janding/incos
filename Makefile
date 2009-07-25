@@ -8,8 +8,9 @@ BUILD_DIR = ./build/$(BUILD_TYPE)
 DEPFLAGS := -MMD -MP
 INCLUDES := -I include -I include/arch/$(ARCH)
 
-CFLAGS += $(DEPFLAGS) $(INCLUDES) -std=c99 -Wall -fno-exceptions
-CXXFLAGS += $(DEPFLAGS) $(INCLUDES) -Wall -fno-exceptions
+CFLAGS += -std=c99 -Wall -fno-exceptions
+CXXFLAGS += -Wall -fno-exceptions
+CPPFLAGS += $(DEPFLAGS) $(INCLUDES)
 LDFLAGS += -L$(dir $(shell $(CC) -print-libgcc-file-name)) -lgcc
 kernel: LDFLAGS += -Map incos.map
 

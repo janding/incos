@@ -4,15 +4,7 @@
 #include "arch/pic.h"
 #include "kernel.h"
 
-void syscall(uint32_t num, uint32_t esp);
-
-struct stack_frame
-{
-    unsigned int gs, fs, es, ds;
-    unsigned int edi, esi, ebp, _esp, ebx, edx, ecx, eax;
-    unsigned int interrupt, error;
-    unsigned int eip, cs, eflags, esp, ss;
-};
+void do_syscall(uint32_t *esp, struct stack_frame *sf);
 
 
 idt_descriptor_t idt[256];
@@ -145,7 +137,7 @@ uint32_t int_handler(uint32_t _esp)
 	}
 
 	if (sf->interrupt == 0x30) {
-		//syscall(sf->eax, esp);
+		do_syscall(&esp, sf);
 	}
 
 	return esp;

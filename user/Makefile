@@ -17,3 +17,4 @@ include user/libuser/Makefile
 
 .phony: user
 user: $(user_BINS) $(user_LIBS)
+user: CPPFLAGS := -Iuser/include $(CPPFLAGS)

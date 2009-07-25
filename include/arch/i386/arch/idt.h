@@ -22,5 +22,13 @@ typedef struct idt_descriptor {
 
 #define IDT_SYSCALL         0xEE00
 
+struct stack_frame
+{
+    unsigned int gs, fs, es, ds;
+    unsigned int edi, esi, ebp, _esp, ebx, edx, ecx, eax;
+    unsigned int interrupt, error;
+    unsigned int eip, cs, eflags, esp, ss;
+};
+
 
 #endif /* ndef KERNEL_ARCH_X86_IDT_H */
