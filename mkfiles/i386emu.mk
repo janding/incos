@@ -4,9 +4,9 @@ IMAGE = /b
 install: system image
 
 .phony: image
-image: $(IMAGE)/boot/incos-$(ARCH)-kernel $(addprefix $(IMAGE)/boot/,$(user_BINS))
+image: $(addprefix $(IMAGE)/boot/,$(notdir $(kernel_BINS) $(user_BINS)))
 
-$(IMAGE)/boot/incos-$(ARCH)-kernel $(addprefix $(IMAGE)/boot/,$(user_BINS)): $(IMAGE)/boot/%: $(BUILD_DIR)/%
+$(addprefix $(IMAGE)/boot/,$(notdir $(kernel_BINS) $(user_BINS))): $(IMAGE)/boot/%: $(BUILD_DIR)/%
 
 $(IMAGE)/%:
 	cp $< $@

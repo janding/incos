@@ -12,14 +12,18 @@ abs(int i)
 static int
 putstr(const char* s)
 {
-	return cons_puts(s);
+	static short *video = (short*)0xb8000;
+	int i = 0;
+	while (s[i]) *video++ = 0x0700 | s[i++];
+	
+	return i;
 }
 
 static int 
 putchar(int c)
 {
 	char b[2] = { c, 0 };
-	cons_puts(b);
+	putstr(b);
 	return c;
 }
 
@@ -83,7 +87,7 @@ ulltoa(unsigned long long n, char* buffer, int radix, char pad, int width, int u
 
 
 int 
-vkprintf(const char *format, va_list ap)
+vdprintf(const char *format, va_list ap)
 {
 	int result = 0;
 	char buffer[130];
@@ -172,7 +176,7 @@ number:
 }
 
 int 
-kprintf(const char *format, ...)
+dprintf(const char *format, ...)
 {
 	va_list ap;
 	int result;
@@ -181,7 +185,7 @@ kprintf(const char *format, ...)
 		return 0;
 
 	va_start(ap, format);
-	result = vkprintf(format, ap);
+	result = vdprintf(format, ap);
 	va_end(ap);
 
 	return result;

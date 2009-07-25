@@ -35,7 +35,7 @@ include mkfiles/rules.mk
 include kernel/Makefile
 include user/Makefile
 
-BINS := $(kernel_BINS) $(user_BINS)
+BINS := $(kernel_BINS) $(user_BINS) $(user_LIBS)
 OBJS := $(kernel_OBJS) $(user_OBJS)
 
 DEPS := $(call objs-to-deps,$(OBJS))
