@@ -156,6 +156,10 @@ number:
 						}
 					}
 					break;
+				case 'c':
+					putchar(va_arg(ap, int));
+					result++;
+					break;
 				case 's':
 					result += putstr(va_arg(ap, char*));
 					break;
