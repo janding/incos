@@ -81,7 +81,7 @@ static void cons_putc(char c)
 	}
 }
 
-int cons_puts(char *p)
+int cons_puts(const char *p)
 {	
 	const char *d = p;
 

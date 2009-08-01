@@ -2,6 +2,7 @@
 #include "arch/paging.h"
 #include "arch/vm/vm.h"
 
+#include "kernel.h"
 #include "multiboot.h"
 
 static vm_pde_t *boot_pgdir;
@@ -66,6 +67,7 @@ vm_sbrk_init(multiboot_info_t *mb_info)
 	return PAGE_ROUND(sbrk);
 }
 
+__global
 void 
 vm_bootstrap(uint32_t mb_magic, multiboot_info_t *mb_info)
 {

@@ -24,10 +24,10 @@ typedef struct idt_descriptor {
 
 struct stack_frame
 {
-    unsigned int gs, fs, es, ds;
-    unsigned int edi, esi, ebp, _esp, ebx, edx, ecx, eax;
-    unsigned int interrupt, error;
-    unsigned int eip, cs, eflags, esp, ss;
+	unsigned int gs, fs, es, ds;
+	unsigned int edi, esi, ebp, _esp, ebx, edx, ecx, eax;
+	unsigned int interrupt, error;
+	unsigned int eip, cs, eflags, esp, ss;
 };
 
 

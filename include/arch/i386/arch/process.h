@@ -18,11 +18,16 @@ struct process
 
 struct thread
 {
+	vaddr_t stack_pointer;
+	vaddr_t continuation;
+
 	process_t *process;
 	uint32_t id;
 	thread_t *next;
+	int state;
+	int sleep;
+	uint32_t ticks;
 
-	uint32_t *esp;
 	vaddr_t stack;
 };
 

@@ -69,7 +69,77 @@ interrupt_stub 47
 # Systemaufruf
 interrupt_stub 48
 
+.global irq0_handler
+irq0_handler:
+	push %eax
+	push %ecx
+	push %edx
+	push %ebx
+	push %ebp
+	push %esi
+	push %edi
+	
+	mov $0x10, %ax
+	mov %ax, %ds
 
+	mov current_thread, %ebx
+	
+	call schedule
+	
+	mov current_thread, %eax
+	
+	# if (eax == ebx) { out 0x20, 0x20; goto irq_return }
+	
+	push $irq_return
+	mov %esp, 0(%ebx)
+	mov 0(%eax), %esp
+	pop %ecx
+	mov $0x20, %al
+	out %al, $0x20
+	jmp *%ecx
+	
+irq_return:
+	mov $0x23, %ax
+	mov %ax, %ds
+	pop %edi
+	pop %esi
+	pop %ebp
+	pop %ebx
+	pop %edx
+	pop %ecx
+	pop %eax
+	iret
+
+
+.global syscall_handler
+syscall_handler:
+	mov $0x10, %bx
+	mov %bx, %ds
+	
+	mov syscalls(,%eax,4), %eax
+	call *%eax
+	
+	//mov %esp, %ecx
+	//mov $syscall_return, %edx
+	//jmp schedule_fast
+
+.global syscall_return
+syscall_return:
+	mov $0x23, %bx
+	mov %bx, %ds
+	iret
+
+
+.global syscall_rdtsc_handler
+syscall_rdtsc_handler:
+#	mov $0x10, %bx
+#	mov %bx, %ds
+	
+	rdtsc
+
+#	mov $0x23, %bx
+#	mov %bx, %ds
+	iret
 
 isr_common:	
 	# Alle Register sichern

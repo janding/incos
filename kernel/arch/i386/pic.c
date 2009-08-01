@@ -2,7 +2,8 @@
 #include "arch/pic.h"
 #include "arch/pio.h"
 
-void pic_init()
+void
+pic_init()
 {
 	outb_wait(PIC1_COMMAND, ICW1_INIT + ICW1_ICW4);
 	outb_wait(PIC2_COMMAND, ICW1_INIT + ICW1_ICW4);
@@ -20,14 +21,16 @@ void pic_init()
 	outb_wait(PIC2_DATA, 0x00);
 }
 
-void pic_eoi(int irq)
+void
+pic_eoi(unsigned int irq)
 {
 	outb(PIC1_COMMAND, PIC_EOI);
 	if (irq >= 8)
 		outb(PIC2_COMMAND, PIC_EOI);
 }
 
-int pic_is_spurious_interrupt(int irq)
+int
+pic_is_spurious_interrupt(unsigned int irq)
 {
 	if (irq == 7) {
 		outb_wait(PIC1_COMMAND, OCW3_READ_IR);
@@ -38,4 +41,22 @@ int pic_is_spurious_interrupt(int irq)
 	}
 
 	return 0;
+}
+
+void
+pic_enable_irq(unsigned int irq)
+{
+	if (irq < 8)
+		outb(PIC1_DATA, inb(PIC1_DATA) | (1 << irq));
+	else
+		outb(PIC2_DATA, inb(PIC2_DATA) | (1 << (irq - 8)));
+}
+
+void
+pic_disable_irq(unsigned int irq)
+{
+	if (irq < 8)
+		outb(PIC1_DATA, inb(PIC1_DATA) & ~(1 << irq));
+	else
+		outb(PIC2_DATA, inb(PIC2_DATA) & ~(1 << (irq - 8)));
 }

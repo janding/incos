@@ -2,12 +2,28 @@
 
 extern int dprintf(const char *, ...);
 
+unsigned long long rdtsc()
+{ 
+	unsigned long long retval;
+	__asm__ __volatile__("rdtsc" : "=A"(retval));
+	return retval;
+}
+
+unsigned long long measure_syscall()
+{
+	unsigned long long start, end;
+	start = rdtsc();
+	end = syscall_rdtsc();
+	return end - start;
+}
+
 int main(int argc, char **argv)
 {
-	dprintf("thread %d process %d hello from %08x\n", syscall_gettid(), syscall_getpid(), main);
-	dprintf("argc = %d\n", argc);
-	for (int i = 0; i < argc; i++)
-		dprintf("argv[%d] = %s\n", i, argv[i]);
+	while (1) {
+		//dprintf("%d ", measure_syscall());
+		dprintf("%d", syscall_gettid());
+		syscall_sleep(1);
+	}
 	
-	return 123;
+	//return 123;
 }

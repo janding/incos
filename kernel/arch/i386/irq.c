@@ -6,16 +6,12 @@
 extern void rtc_irq_handler();
 
 void
-handle_irq(uint32_t *esp, int irq)
+handle_irq(uint32_t *esp, unsigned int irq)
 {
 	switch (irq) {
-		case 0:
-			current_thread->esp = (uint32_t*)*esp;
-			schedule();
-			*esp = (uint32_t)current_thread->esp;
-			break;
 		case 8:
 			rtc_irq_handler();
+			break;
 		default:
 			kprintf("[irq%02d]\n", irq);
 			break;
@@ -26,4 +22,16 @@ handle_irq(uint32_t *esp, int irq)
 	}
 
 	pic_eoi(irq);
+}
+
+void
+enable_irq(unsigned int irq)
+{
+	pic_enable_irq(irq);
+}
+
+void
+disable_irq(unsigned int irq)
+{
+	pic_disable_irq(irq);
 }

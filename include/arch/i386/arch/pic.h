@@ -32,8 +32,10 @@
 
 #define PIC_EOI			OCW2_EOI
 
-extern void pic_init();
-extern void pic_eoi(int irq);
-int pic_is_spurious_interrupt(int irq);
+extern void		pic_init();
+extern void		pic_eoi(unsigned int irq);
+extern int		pic_is_spurious_interrupt(unsigned int irq);
+extern void		pic_enable_irq(unsigned int irq);
+extern void		pic_disable_irq(unsigned int irq);
 
 #endif /* ndef KERNEL_ARCH_PIC_H */

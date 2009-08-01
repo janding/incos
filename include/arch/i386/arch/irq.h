@@ -6,6 +6,8 @@
 #define IRQ_BASE		0x20
 
 
-void handle_irq(uint32_t *esp, int irq);
+extern void	handle_irq(uint32_t *esp, unsigned int irq);
+extern void	enable_irq(unsigned int irq);
+extern void	disable_irq(unsigned int irq);
 
 #endif /* ndef IRQ_H */

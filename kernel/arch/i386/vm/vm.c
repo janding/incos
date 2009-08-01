@@ -20,6 +20,7 @@ vm_phys_early_alloc_pages(unsigned int num)
 	return r;
 }
 
+__global
 paddr_t
 vm_phys_early_alloc_page()
 {

@@ -65,6 +65,10 @@ extern void interrupt_stub_46();
 extern void interrupt_stub_47();
 extern void interrupt_stub_48();
 
+extern void irq0_handler();
+extern void syscall_handler();
+extern void syscall_rdtsc_handler();
+
 void idt_init()
 {
 	set_intr_gate(0, (uint32_t)&interrupt_stub_0);
@@ -87,7 +91,8 @@ void idt_init()
 	set_intr_gate(18, (uint32_t)&interrupt_stub_18);
 	set_intr_gate(19, (uint32_t)&interrupt_stub_19);
 
-	set_intr_gate(32, (uint32_t)&interrupt_stub_32);
+//	set_intr_gate(32, (uint32_t)&interrupt_stub_32);
+	set_intr_gate(32, (uint32_t)&irq0_handler);
 	set_intr_gate(33, (uint32_t)&interrupt_stub_33);
 	set_intr_gate(34, (uint32_t)&interrupt_stub_34);
 	set_intr_gate(35, (uint32_t)&interrupt_stub_35);
@@ -104,18 +109,23 @@ void idt_init()
 	set_intr_gate(46, (uint32_t)&interrupt_stub_46);
 	set_intr_gate(47, (uint32_t)&interrupt_stub_47);
 	
-	set_intr_syscall(48, (uint32_t)&interrupt_stub_48);
+	set_intr_syscall(48, (uint32_t)&syscall_handler);
+	set_intr_syscall(49, (uint32_t)&syscall_rdtsc_handler);
+	//set_intr_syscall(48, (uint32_t)&interrupt_stub_48);
 
 	__asm__("lidt %[idtr]\n\t" :: [idtr] "m"(idtr));
 }
 
 const char * exceptions[] = { "DE", "DB", "NMI", "BP", "OF", "BR", "UD", "NM", "DF", "CO", "TS", "NP", "SS", "GP", "PF", "(reserved)", "MF", "AC", "MC", "XM" };
 
-uint32_t int_handler(uint32_t _esp)
+__global
+uint32_t
+int_handler(uint32_t _esp)
 {
 	uint32_t esp = _esp;
 	struct stack_frame *sf = (struct stack_frame*)esp;
 
+	kprintf("INTERRUPT %08x\n", sf->interrupt);
 	if (sf->interrupt < 0x20) {
 		kprintf("EXCEPTION");		
 		if (sf->interrupt < sizeof(exceptions) / sizeof(*exceptions))
@@ -145,7 +155,7 @@ uint32_t int_handler(uint32_t _esp)
 	}
 
 	if (sf->interrupt == 0x30) {
-		do_syscall(&esp, sf);
+		//do_syscall(&esp, sf);
 	}
 
 	return esp;

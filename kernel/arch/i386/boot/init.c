@@ -23,6 +23,7 @@ run_boot_modules()
 	}
 }
 
+__global
 void 
 init(uint32_t mb_magic, multiboot_info_t *mb_info)
 {

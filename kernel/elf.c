@@ -42,15 +42,7 @@ run_elf_image(paddr_t base, const char *cmdline)
 		}
 	}
 
-	if (cmdline) {
-		paddr_t pa = phys_alloc_zeroed_page();
-		char *temp = vm_kmap_map_temporary(pa);
-		strlcpy(temp, cmdline, PAGE_SIZE);
-		process_map(process, 0xef800000, pa, PAGE_SIZE);
-		vm_kmap_unmap_temporary(temp);
-	} else {
-		process_zero_mem(process, 0xef800000, PAGE_SIZE);
-	}
+	process_set_cmdline(process, cmdline);
 
 	create_thread(process, (void*)elf_hdr->e_entry);
 }

@@ -12,3 +12,6 @@ kernel_BINS += $(BUILD_DIR)/incos-$(ARCH)-kernel
 
 $(BUILD_DIR)/incos-$(ARCH)-kernel: $(kernel_OBJS)
 	$(LD) -T $(kernel_LDSCRIPT) -o $@ $+ $(LDFLAGS) 
+
+#$(BUILD_DIR)/incos-$(ARCH)-kernel: $(kernel_SRCS)
+#	$(CC) $(CPPFLAGS) $(CFLAGS) -combine -fwhole-program -T $(kernel_LDSCRIPT) -o $@ $+ $(LDFLAGS) 
