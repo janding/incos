@@ -3,8 +3,8 @@
 
 #include <types.h>
 
-#define MULTIBOOT_HEADER_MAGIC 0x1badb002
-#define MULTIBOOT_BOOTLOADER_MAGIC 0x2badb002
+#define MULTIBOOT_HEADER_MAGIC			0x1badb002
+#define MULTIBOOT_BOOTLOADER_MAGIC		0x2badb002
 
 // These flags specify required features of the boot loader.
 enum multiboot_header_flags {

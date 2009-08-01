@@ -17,6 +17,7 @@ CC := $(TOOLCHAIN_PREFIX)gcc
 CXX := $(TOOLCHAIN_PREFIX)g++
 LD := $(TOOLCHAIN_PREFIX)ld
 AS := $(TOOLCHAIN_PREFIX)as
+AR := $(TOOLCHAIN_PREFIX)ar
 
 .phony: all
 all: system
@@ -32,7 +33,7 @@ include kernel/Makefile
 include user/Makefile
 
 BINS := $(kernel_BINS) $(user_BINS) $(user_LIBS)
-OBJS := $(kernel_OBJS) $(user_OBJS)
+OBJS := $(kernel_OBJS) $(user_OBJS) $(extra_OBJS)
 
 DEPS := $(call objs-to-deps,$(OBJS))
 

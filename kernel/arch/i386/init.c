@@ -1,7 +1,7 @@
 #include <types.h>
 
 #include "kernel.h"
-#include "multiboot.h"
+#include "boot/multiboot.h"
 	
 extern void cons_init();
 extern void gdt_init();

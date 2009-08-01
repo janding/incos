@@ -4,8 +4,11 @@
 
 #include "vm/vm.h"
 
+__global
 paddr_t phys_sbrk_init;
+__global
 paddr_t phys_sbrk;
+__global
 paddr_t phys_space_end;
 
 static unsigned int early_alloc_allowed = 1;
