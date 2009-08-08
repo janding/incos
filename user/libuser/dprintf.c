@@ -28,8 +28,8 @@ putchar(int c)
 const char * 
 lltoa(long long n, char* buffer, int radix, char pad, int width, int uppercase)
 {
-	const char *digits = uppercase ? "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" 
-								   : "0123456789abcdefghijklmnopqrstuvwxyz";
+	const char *digits = uppercase ? "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZLOL" 
+								   : "0123456789abcdefghijklmnopqrstuvwxyzlol";
 	char tbuf[130], *p = tbuf, *d;
 	int neg = 0;
 
