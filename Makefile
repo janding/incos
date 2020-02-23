@@ -8,7 +8,7 @@ BUILD_DIR = ./build/$(BUILD_TYPE)
 DEPFLAGS := -MMD -MP
 INCLUDES := -I include -I include/arch/$(ARCH)
 
-CFLAGS += -std=c99 -Wall -fno-exceptions -O3 -fomit-frame-pointer -fcaller-saves
+CFLAGS += -std=c99 -Wall -fno-exceptions -O3 -fomit-frame-pointer -fcaller-saves -fno-builtin
 CPPFLAGS += $(DEPFLAGS) $(INCLUDES)
 LDFLAGS += -L$(dir $(shell $(CC) -print-libgcc-file-name)) -lgcc
 kernel: LDFLAGS += -Map incos.map
@@ -60,5 +60,5 @@ clean:
 .phony: distclean
 distclean:
 	rm -rf ./build/*
-	
+
 -include mkfiles/i386emu.mk
