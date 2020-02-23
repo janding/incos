@@ -12,8 +12,8 @@
 	})
 
 #define syscall1(number, param1) ({ \
-		int result; \
-		__asm__ __volatile__("int $0x30\n\t" : "=a"(result) : "a"(number), "b"(param1) : "ecx", "edx"); \
+		int result, temp; \
+		__asm__ __volatile__("int $0x30\n\t" : "=a"(result), "=c"(temp) : "a"(number), "c"(param1) : "ebx", "edx"); \
 		result; \
 	})
 
