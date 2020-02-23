@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 {
 	while (1) {
 		//dprintf("%d ", measure_syscall());
-		dprintf("%d", syscall_gettid());
+		dprintf("%d", syscall_getpid());
 		syscall_sleep(1);
 	}
 	
