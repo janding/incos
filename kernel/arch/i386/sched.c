@@ -12,11 +12,10 @@ dump_page_table()
 	vm_pde_t *pgdir = (vm_pde_t*)0xfffff000;
 	vm_pte_t *pgtbl = (vm_pte_t*)0xffc00000;
 	vaddr_t va, va_start;
-	paddr_t pa, pa_start;
+	paddr_t pa_start;
 	int priv = -1;
 
 	va = 0;
-	pa = 0;
 	va_start = 0;
 	pa_start = 0;
 
