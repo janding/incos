@@ -9,9 +9,9 @@ typedef unsigned long long uint64_t;
 typedef unsigned int vaddr_t;
 typedef unsigned int paddr_t;
 
-typedef long ptrdiff_t;
+typedef long int ptrdiff_t;
 typedef unsigned int uintptr_t;
 
-typedef unsigned long size_t;
+typedef unsigned long int size_t;
 
 #endif /* ndef ARCH_TYPES_H */
