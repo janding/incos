@@ -11,11 +11,5 @@ kernel-$(ARCH): $(BUILD_DIR)/incos-$(ARCH)-kernel
 kernel_BINS += $(BUILD_DIR)/incos-$(ARCH)-kernel
 extra_OBJS += $(BUILD_DIR)/$(kernel_COMBINE_OBJ)
 
-#$(BUILD_DIR)/incos-$(ARCH)-kernel: $(kernel_OBJS)
-#	$(LD) -T $(kernel_LDSCRIPT) -o $@ $+ $(LDFLAGS) 
-
-$(BUILD_DIR)/$(kernel_COMBINE_OBJ): $(kernel_COMBINE_SRCS)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c -combine -fwhole-program -o $@ $+
-
-$(BUILD_DIR)/incos-$(ARCH)-kernel: $(BUILD_DIR)/$(kernel_COMBINE_OBJ) $(call srcs-to-objs,$(kernel_NO_COMBINE_SRCS))
+$(BUILD_DIR)/incos-$(ARCH)-kernel: $(kernel_OBJS)
 	$(LD) -T $(kernel_LDSCRIPT) -o $@ $+ $(LDFLAGS) 
